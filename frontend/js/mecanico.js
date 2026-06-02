@@ -142,6 +142,26 @@ document.getElementById('formEditar')?.addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Guardando...';
     
     try {
+        // Primero actualizar la orden
+        const response = await fetch(`${API_URL}/mecanicos/orden/${ordenId}/completa`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                Estado: estado,
+                Costo: costo,
+                Observaciones: observaciones
+            })
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.mensaje || 'Error al actualizar');
+        }
+        
+        // Si está terminado Y hay descripción del trabajo, crear UN SOLO registro
         if (estado === 'Terminado' && descripcionTrabajo) {
             const ordenResponse = await fetch(`${API_URL}/mecanicos/orden/${ordenId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -161,24 +181,6 @@ document.getElementById('formEditar')?.addEventListener('submit', async (e) => {
                     idOrden: ordenId
                 })
             });
-        }
-        
-        const response = await fetch(`${API_URL}/mecanicos/orden/${ordenId}/completa`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                Estado: estado,
-                Costo: costo,
-                Observaciones: observaciones
-            })
-        });
-        
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.mensaje || 'Error al actualizar');
         }
         
         alert('Cambios guardados exitosamente');

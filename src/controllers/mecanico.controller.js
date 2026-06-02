@@ -112,26 +112,6 @@ const actualizarOrdenCompleta = async (req, res) => {
             return res.status(404).json({ mensaje: 'Orden no encontrada' });
         }
         
-        if (Estado === 'Terminado') {
-            const mecanicoId = req.usuario.id;
-            const mecanico = await MecanicoModel.findById(mecanicoId);
-            const mecanicoNombre = mecanico ? `${mecanico.nombre} ${mecanico.apellido}` : 'Mecánico';
-            
-            const nuevoRegistro = new Registro({
-                id_Registro: Math.floor(Math.random() * 900000) + 100000,
-                Fecha: new Date(),
-                CostoFinal: Costo || resultado.Costo || 0,
-                Descripcion: Observaciones || 'Trabajo completado',
-                MecanicoEncargado: mecanicoNombre,
-                id_MecanicoFK: mecanicoId,
-                id_VehiculoFK: resultado.id_VehiculoFK,
-                progreso: 100,
-                tareas_realizadas: [Observaciones || 'Trabajo realizado']
-            });
-            
-            await nuevoRegistro.save();
-        }
-        
         res.json({ mensaje: 'Orden actualizada', orden: resultado });
     } catch (error) {
         console.error('Error:', error);
