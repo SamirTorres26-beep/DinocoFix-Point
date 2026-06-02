@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinoco Fix-Point | Mecánico</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Dinoco Fix-Point - Panel Mecánico</h1>
+            <div class="user-info">
+                <span>Bienvenido, <strong id="usuarioNombre"></strong></span>
+                <span class="rol-badge" id="usuarioRol"></span>
+                <button class="btn-cerrar" onclick="cerrarSesion()">Cerrar Sesión</button>
+            </div>
+        </div>
+        
+        <!-- Botones principales -->
+        <div class="btn-grid">
+            <button class="btn btn-warning" onclick="abrirModal('pendientes')">
+                <i class="fas fa-clock"></i> Órdenes Pendientes
+            </button>
+            <button class="btn btn-primary" onclick="abrirModal('misOrdenes')">
+                <i class="fas fa-tools"></i> Mis Órdenes
+            </button>
+            <button class="btn btn-secondary" onclick="abrirModal('historial')">
+                <i class="fas fa-history"></i> Mi Historial
+            </button>
+            <button class="btn btn-success" onclick="abrirModal('registrarMecanico')">
+                <i class="fas fa-user-plus"></i> Registrar Mecánico
+            </button>
+        </div>
+    </div>
+    <!-- Resumen de actividad -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="ordenesPendientesCount">0</h3>
+                <p>Órdenes Pendientes</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-tools"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="ordenesProcesoCount">0</h3>
+                <p>Órdenes En Proceso</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje del día / Tips rápidos -->
+    <div class="tips-card">
+        <div class="tips-icon">
+            <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="tips-content">
+            <h3>Tip del día</h3>
+            <p id="tipOfDay">Revisa siempre el nivel de aceite antes de entregar el vehículo.</p>
+        </div>
+    </div>
+
+    <!-- MODAL: Órdenes Pendientes -->
+    <div id="modalPendientes" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-clock"></i> Órdenes Pendientes</h3>
+                <span class="close" onclick="cerrarModal('pendientes')">&times;</span>
+            </div>
+            <div id="ordenesPendientesLista" class="cards-container"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: Mis Órdenes -->
+    <div id="modalMisOrdenes" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-tools"></i> Mis Órdenes Asignadas</h3>
+                <span class="close" onclick="cerrarModal('misOrdenes')">&times;</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>#Orden</th><th>Fecha</th><th>Estado</th><th>Costo</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="misOrdenesLista"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Mi Historial -->
+    <div id="modalHistorial" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-history"></i> Mi Historial de Trabajos</h3>
+                <span class="close" onclick="cerrarModal('historial')">&times;</span>
+            </div>
+            <div id="historialTrabajosLista" class="cards-container"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: Registrar Mecánico -->
+    <div id="modalRegistrarMecanico" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Registrar Nuevo Mecánico</h3>
+                <span class="close" onclick="cerrarModal('registrarMecanico')">&times;</span>
+            </div>
+            <form id="formRegistrarMecanico">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="regNombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Apellido</label>
+                    <input type="text" id="regApellido" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" id="regTelefono">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail">
+                </div>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="regUsuario" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="regContrasena" required>
+                </div>
+                <button type="submit" class="btn btn-success">Registrar Mecánico</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Editar Orden -->
+    <div id="modalEditar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar Orden</h3>
+                <span class="close" onclick="cerrarModal('editar')">&times;</span>
+            </div>
+            <form id="formEditar">
+                <input type="hidden" id="editOrdenId">
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="editEstado">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En Proceso">En Proceso</option>
+                        <option value="Terminado">Terminado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Costo</label>
+                    <input type="number" id="editCosto" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Observaciones</label>
+                    <textarea id="editObservaciones" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Registrar Trabajo (si está terminado)</label>
+                    <textarea id="editDescripcion" rows="2" placeholder="Describe el trabajo realizado..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+    <script type="module" src="/js/mecanico.js"></script>
+    <script>
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '/login.html';
+        }
+        
+        function abrirModal(tipo) {
+            const modalMap = {
+                'pendientes': 'modalPendientes',
+                'misOrdenes': 'modalMisOrdenes',
+                'historial': 'modalHistorial',
+                'registrarMecanico': 'modalRegistrarMecanico',
+                'editar': 'modalEditar'
+            };
+            document.getElementById(modalMap[tipo]).style.display = 'flex';
+            if (tipo === 'pendientes') cargarOrdenesPendientes();
+            if (tipo === 'misOrdenes') cargarMisOrdenes();
+            if (tipo === 'historial') cargarMiHistorial();
+        }
+        
+        function cerrarModal(tipo) {
+            const modalMap = {
+                'pendientes': 'modalPendientes',
+                'misOrdenes': 'modalMisOrdenes',
+                'historial': 'modalHistorial',
+                'registrarMecanico': 'modalRegistrarMecanico',
+                'editar': 'modalEditar'
+            };
+            document.getElementById(modalMap[tipo]).style.display = 'none';
+        }
+        
+        window.cargarOrdenesPendientes = cargarOrdenesPendientes;
+        window.cargarMisOrdenes = cargarMisOrdenes;
+        window.cargarMiHistorial = cargarMiHistorial;
+        window.abrirEditar = abrirEditar;
+    </script>
+</body>
+</html>

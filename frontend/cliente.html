@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinoco Fix-Point | Cliente</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>Dinoco Fix-Point</h1>
+        <div class="user-info">
+            <span>Bienvenido, <strong id="usuarioNombre"></strong></span>
+            <span class="rol-badge" id="usuarioRol"></span>
+            <button class="btn-cerrar" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </div>
+    
+    <!-- Botones principales -->
+    <div class="btn-grid">
+        <button class="btn" onclick="abrirModal('vehiculos')">
+            <i class="fas fa-car"></i> Mis Vehículos
+        </button>
+        <button class="btn btn-success" onclick="abrirModal('agregarVehiculo')">
+            <i class="fas fa-plus-circle"></i> Agregar Vehículo
+        </button>
+        <button class="btn btn-primary" onclick="abrirModal('cita')">
+            <i class="fas fa-calendar-alt"></i> Agendar Cita
+        </button>
+        <button class="btn btn-secondary" onclick="abrirModal('ordenes')">
+            <i class="fas fa-clipboard-list"></i> Mis Órdenes
+        </button>
+        <button class="btn btn-warning" onclick="abrirModal('historial')">
+            <i class="fas fa-history"></i> Historial
+        </button>
+    </div>
+
+    <!-- Sección de Promociones y Servicios -->
+    <div class="promociones-section">
+        <h2 class="section-title"><i class="fas fa-tags"></i> Promociones Especiales</h2>
+        <div class="promociones-grid">
+            <div class="promo-card">
+                <div class="promo-img">
+                    <i class="fas fa-tachometer-alt"></i>
+                </div>
+                <h3>Diagnóstico Computarizado</h3>
+                <p>Escaneo electrónico completo del motor.</p>
+                <div class="promo-price">$400 MXN</div>
+                <div class="promo-discount">100% off</div>
+                <button class="btn btn-small" onclick="agendarPromocion('Diagnóstico Computarizado')">Agendar</button>
+            </div>
+
+            <div class="promo-card">
+                <div class="promo-img">
+                    <i class="fa-solid fa-truck-monster"></i>
+                </div>
+                <h3>Aire premium</h3>
+                <p>Llena tus llanatas con aire de muy buena calidad extraida del monte Everest</p>
+                <div class="promo-price">$499 MXN</div>
+                <div class="promo-count">Precio especial</div>
+                <button class="btn btn-small" onclick="agendarPromocion('Aire premium')">Agendar</button>
+            </div>
+
+            <div class="promo-card">
+                <div class="promo-img">
+                    <i class="fa-solid fa-wind"></i>
+                </div>
+                <h3>Reparacion de A/C</h3>
+                <p>Deja atras el calor insoportable de Lerdo</p>
+                <div class="promo-price">$1,999 MXN</div>
+                <div class="promo-discount">$2,000 MXN</div>
+                <button class="btn btn-small" onclick="agendarPromocion('Reparacion de A/C')">Agendar</button>
+            </div>
+
+            <div class="promo-card">
+                <div class="promo-img">
+                    <i class="fas fa-oil-can"></i>
+                </div>
+                <h3>Cambio de Aceite</h3>
+                <p>Incluye aceite y filtro de calidad</p>
+                <div class="promo-price">$899 MXN</div>
+                <div class="promo-count">Ahorra $300 MXN</div>
+                <button class="btn btn-small" onclick="agendarPromocion('Cambio de Aceite')">Agendar</button>
+            </div>
+
+            <div class="promo-card">
+                <div class="promo-img">
+                    <i class="fa-solid fa-horse"></i>
+                </div>
+                <h3>Cambio de herraduras</h3>
+                <p>Trae tu mula para cambio de herraduras</p>
+                <div class="promo-price">$250 MXN</div>
+                <div class="promo-count">Ahorra $250 MXN</div>
+                <button class="btn btn-small" onclick="agendarPromocion('Cambio de herraduras')">Agendar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner de confianza -->
+    <div class="trust-banner">
+        <div class="trust-item">
+            <i class="fas fa-calendar-check"></i>
+            <span>Más de 10,000 servicios realizados</span>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-users"></i>
+            <span>+5,000 clientes insatisfechos</span>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-certificate"></i>
+            <span>Sin garantía en todos los servicios</span>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-clock"></i>
+            <span>Servicio express disponible</span>
+        </div>
+    </div>
+</div>
+
+    <!-- MODAL: Mis Vehículos -->
+    <div id="modalVehiculos" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-car"></i> Mis Vehículos</h3>
+                <span class="close" onclick="cerrarModal('vehiculos')">&times;</span>
+            </div>
+            <div id="vehiculosLista" class="cards-container">
+                <p>Cargando...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Agregar Vehículo -->
+    <div id="modalAgregarVehiculo" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Agregar Vehículo</h3>
+                <span class="close" onclick="cerrarModal('agregarVehiculo')">&times;</span>
+            </div>
+            <form id="formAgregarVehiculo">
+                <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" id="marca" placeholder="Ej: Toyota" required>
+                </div>
+                <div class="form-group">
+                    <label>Modelo</label>
+                    <input type="text" id="modelo" placeholder="Ej: Corolla" required>
+                </div>
+                <div class="form-group">
+                    <label>Año</label>
+                    <input type="number" id="anio" placeholder="Ej: 2020">
+                </div>
+                <div class="form-group">
+                    <label>Placa</label>
+                    <input type="text" id="placa" placeholder="Ej: ABC-123" required>
+                </div>
+                <div class="form-group">
+                    <label>Color</label>
+                    <input type="text" id="color" placeholder="Ej: Rojo">
+                </div>
+                <button type="submit" class="btn btn-success">Agregar Vehículo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Agendar Cita -->
+    <div id="modalCita" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-alt"></i> Agendar Cita</h3>
+                <span class="close" onclick="cerrarModal('cita')">&times;</span>
+            </div>
+            <form id="formCita">
+                <div class="form-group">
+                    <label>Placa del Vehículo</label>
+                    <input type="text" id="placaVehiculo" placeholder="Ej: ABC-123" required>
+                </div>
+                <div class="form-group">
+                    <label>Fecha de la Cita</label>
+                    <input type="date" id="fechaCita" required>
+                </div>
+                <div class="form-group">
+                    <label>Hora</label>
+                    <input type="time" id="horaCita" required>
+                </div>
+                <div class="form-group">
+                    <label>Motivo</label>
+                    <textarea id="motivoCita" rows="3" placeholder="Describe el problema o servicio que necesita" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Agendar Cita</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Mis Órdenes -->
+    <div id="modalOrdenes" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-clipboard-list"></i> Mis Órdenes de Servicio</h3>
+                <span class="close" onclick="cerrarModal('ordenes')">&times;</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>#Orden</th><th>Fecha</th><th>Estado</th><th>Costo</th><th>Observaciones</th></tr>
+                    </thead>
+                    <tbody id="ordenesLista"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Historial -->
+    <div id="modalHistorial" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-history"></i> Historial de Servicios</h3>
+                <span class="close" onclick="cerrarModal('historial')">&times;</span>
+            </div>
+            <div id="historialLista" class="cards-container"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+    <script type="module" src="/js/cliente.js"></script>
+    <script>
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '/login.html';
+        }
+        
+        function abrirModal(tipo) {
+            const modalId = `modal${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`;
+            document.getElementById(modalId).style.display = 'flex';
+            if (tipo === 'vehiculos') cargarVehiculos();
+            if (tipo === 'ordenes') cargarOrdenes();
+            if (tipo === 'historial') cargarHistorial();
+        }
+        
+        function cerrarModal(tipo) {
+            const modalId = `modal${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`;
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        window.cargarVehiculos = cargarVehiculos;
+        window.cargarOrdenes = cargarOrdenes;
+        window.cargarHistorial = cargarHistorial;
+    </script>
+</body>
+</html>
