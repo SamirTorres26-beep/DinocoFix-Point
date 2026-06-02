@@ -1,6 +1,6 @@
 import { checkAuth, mostrarInfoUsuario } from './auth.js';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://dinocofix-point.onrender.com/api';
 
 checkAuth();
 mostrarInfoUsuario();

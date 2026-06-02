@@ -1,5 +1,5 @@
 // Configuración de la API
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://dinocofix-point.onrender.com/api';
 
 // Guardar token en localStorage
 export function setToken(token) {
